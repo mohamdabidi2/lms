@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { loginUser } from "../services/authService";
 import "../App.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null); // { type: "error"|"success", text }
   const [loading, setLoading] = useState(false);
-
+const navigate=useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -17,6 +18,9 @@ const Login = () => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
         setMessage({ type: "success", text: "Login successful! Redirecting…" });
+        setTimeout(() => {
+          navigate("/dashboard")
+        }, 1500);
       } else {
         setMessage({ type: "error", text: "Invalid email or password." });
       }
