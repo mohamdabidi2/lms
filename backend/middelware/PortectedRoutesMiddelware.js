@@ -29,3 +29,19 @@ exports.admin=async (req,res,next)=>{
         res.status(403).json({message:"Admin access only"})
     }
 }
+exports.teacher=async (req,res,next)=>{
+    if(req.user&& req.user.role==="teacher"){
+        next()
+    }
+    else{
+        res.status(403).json({message:"teacher access only"})
+    }
+}
+exports.teacherORAdmin=async (req,res,next)=>{
+    if(req.user&& (req.user.role==="teacher"||req.user.role==="admin")){
+        next()
+    }
+    else{
+        res.status(403).json({message:"Authorized access only"})
+    }
+}

@@ -7,7 +7,7 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [message, setMessage] = useState(null); // { type: "error"|"success", text }
   const [loading, setLoading] = useState(false);
-const navigate=useNavigate()
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -36,20 +36,25 @@ const navigate=useNavigate()
       <div className="auth-card">
         {/* Brand */}
         <div className="auth-brand">
-          <div className="brand-icon">🎓</div>
+          <div className="brand-icon">
+            <span role="img" aria-label="graduation cap">🎓</span>
+          </div>
           <h1>Welcome Back</h1>
           <p>Sign in to your LMS account</p>
         </div>
 
         {/* Message */}
         {message && (
-          <div className={`auth-message ${message.type}`}>{message.text}</div>
+          <div className={`auth-message ${message.type}`}>
+            {message.type === 'error' ? '⚠️ ' : '✅ '}
+            {message.text}
+          </div>
         )}
 
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="field-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Email Address</label>
             <input
               id="email"
               type="email"
@@ -73,7 +78,7 @@ const navigate=useNavigate()
           </div>
 
           <button className="auth-btn" type="submit" disabled={loading}>
-            {loading ? "Signing in…" : "Sign In"}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 

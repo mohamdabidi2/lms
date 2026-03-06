@@ -32,14 +32,19 @@ const Register = () => {
             <div className="auth-card">
                 {/* Brand */}
                 <div className="auth-brand">
-                    <div className="brand-icon">✏️</div>
+                    <div className="brand-icon">
+                        <span role="img" aria-label="pencil">✏️</span>
+                    </div>
                     <h1>Create Account</h1>
                     <p>Join your LMS today</p>
                 </div>
 
                 {/* Message */}
                 {message && (
-                    <div className={`auth-message ${message.type}`}>{message.text}</div>
+                    <div className={`auth-message ${message.type}`}>
+                        {message.type === 'error' ? '⚠️ ' : '✅ '}
+                        {message.text}
+                    </div>
                 )}
 
                 {/* Form */}
@@ -57,7 +62,7 @@ const Register = () => {
                     </div>
 
                     <div className="field-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">Email Address</label>
                         <input
                             id="email"
                             type="email"
@@ -81,7 +86,7 @@ const Register = () => {
                     </div>
 
                     <button className="auth-btn" type="submit" disabled={loading}>
-                        {loading ? "Creating account…" : "Create Account"}
+                        {loading ? "Creating account..." : "Create Account"}
                     </button>
                 </form>
 

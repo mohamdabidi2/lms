@@ -2,6 +2,7 @@ import { Navigate, Routes, Route } from "react-router-dom"
 import Login from "./components/login"
 import Register from "./components/register"
 import Dashboard from "./components/dashboard"
+import UserManagement from "./components/UserManagement"
 function ProtectedRouter({ children }) {
     const token = localStorage.getItem('token')
     if (!token) {
@@ -22,6 +23,14 @@ const Router = () => {
                          <ProtectedRouter>
                           <Dashboard />
                           </ProtectedRouter>
+                          
+                   } />
+                           <Route path="/dashboard/users" element={
+                    
+                         <ProtectedRouter>
+                          <UserManagement />
+                          </ProtectedRouter>
+                          
                    } />
       
 
