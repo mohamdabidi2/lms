@@ -1,4 +1,4 @@
-import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Sidebar = () => {
@@ -6,11 +6,20 @@ const Sidebar = () => {
     
         const navigate = useNavigate();
         const location = useLocation();
+
         const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        
         navigate("/login");
     };
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+    
 
     const isActive = (path) => location.pathname === path;
     return (  <aside className="dashboard-sidebar">

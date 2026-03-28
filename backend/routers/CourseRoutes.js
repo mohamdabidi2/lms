@@ -10,9 +10,10 @@ const {
     deleteCourse,
     enrollStudent
 } = require('../controllers/CourseController')
+const { upload } = require("../services/multer")
 router.get("/",protect,teacherORAdmin,getAllCourses)
 router.get("/:id",protect,teacherORAdmin,getCourseById)
-router.post("/",protect,teacherORAdmin,createCourse)
+router.post("/",protect,teacherORAdmin,upload.single("thumbnail"),createCourse)
 router.put("/:id",protect,teacherORAdmin,updateCourse)
 router.delete("/:id",protect,teacherORAdmin,deleteCourse)
 router.post("/:id/enroll",protect,enrollStudent)

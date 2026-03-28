@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import Sidebar from "./shared/sidebar"
 const UserManagement = () => {
     const [Users, setUsers] = useState([])
     const [loading, setLoading] = useState(false)
@@ -11,7 +10,7 @@ const UserManagement = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token')
-            const res = await axios.get("http://localhost:5000/api/users", { headers: { Authorization: `bearer ${token}` } })
+            const res = await axios.get("http://localhost:5000/api/users", { headers: { authorization: `Bearer ${token}` } })
             setUsers(res.data)
         }
         catch (error) {
@@ -29,10 +28,10 @@ const UserManagement = () => {
         try {
             const token = localStorage.getItem('token')
             if (editingUser) {
-                await axios.put("http://localhost:5000/api/users/" + editingUser._id, form, { headers: { Authorization: `bearer ${token}` } })
+                await axios.put("http://localhost:5000/api/users/" + editingUser._id, form, { headers: { authorization: `Bearer ${token}` } })
             }
             else {
-                await axios.post("http://localhost:5000/api/users", form, { headers: { Authorization: `bearer ${token}` } })
+                await axios.post("http://localhost:5000/api/users", form, { headers: { authorization: `Bearer ${token}` } })
             }
             fetchUsers();
             setShowModal(false)
@@ -52,7 +51,7 @@ const UserManagement = () => {
             try {
 
                 const token = localStorage.getItem('token')
-                await axios.delete("http://localhost:5000/api/users/" + id, { headers: { Authorization: `bearer ${token}` } })
+                await axios.delete("http://localhost:5000/api/users/" + id, { headers: { authorization: `Bearer ${token}` } })
                 fetchUsers()
             }
             catch (error) {
@@ -62,12 +61,10 @@ const UserManagement = () => {
     }
 
     return (
-        <div className="dashboard-container">
-            <Sidebar />
-            <div style={{ width: "75vw", padding: "30px 20px" }} className="user-management">
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <h2>User mangement</h2>
-                    <button className="btn-primary">Add New User</button>
+        <div className="user-management">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <h2>User Management</h2>
+                    <button className="btn-primary" onClick={()=>{setShowModal(true)}}>Add New User</button>
 
                 </div>
                 <div>
@@ -98,8 +95,13 @@ const UserManagement = () => {
                                     </td>
                                     <td>
                                         <div style={{ display: "flex", gap: "8px" }}>
-                                            <button className="btn-ghost">Edit</button>
-                                            <button className="btn-ghost" style={{ color: '#fca5a5' }}>Delete</button>
+                                            <button className="btn-ghost" onClick={()=>{
+                                                console.log(user)
+                                                setEditingUser(user)
+                                                setShowModal(true) 
+                                                setform(user)
+                                            }}>Edit</button>
+                                            <button className="btn-ghost" style={{ color: '#fca5a5' }} onClick={()=>{handelDelete(user._id)}}>Delete</button>
                                         </div>
                                     </td>
 
@@ -109,25 +111,25 @@ const UserManagement = () => {
                     </table>
                 </div>
 
-                <div className="modal-overlay">
+                <div style={showModal==true?{display:"flex"}:{display:"none"}} className="modal-overlay">
                     <div className="modal-content">
                         <h3 style={{ marginBottom: "1.5rem", fontSize: "1.5rem" }}>{editingUser ? "Edit User" : "Add User"}</h3>
-                        <form action="" style={{ display: "flex", flexDirection: "column", gap: '1rem' }}>
+                        <form action="" style={{ display: "flex", flexDirection: "column", gap: '1rem' }} onSubmit={handelSubmit}>
                             <div className="field-group">
                                 <label htmlFor="">name</label>
-                                <input type="text" required />
+                                <input value={form.name} type="text" required onChange={(e) => { setform({ ...form, name: e.target.value }) }} />
                             </div>
                             <div className="field-group">
                                 <label htmlFor="">email</label>
-                                <input type="email" required />
+                                <input value={form.email} type="email" onChange={(e) => { setform({ ...form, email: e.target.value }) }} required />
                             </div>
                             <div className="field-group">
                                 <label htmlFor="">password</label>
-                                <input type="password" required />
+                                <input value={form.password || ''} type="password" onChange={(e) => { setform({ ...form, password: e.target.value }) }} required={!editingUser} />
                             </div>
                             <div className="field-group">
                                 <label htmlFor="">Role</label>
-                                <select name="" id="">
+                                <select value={form.role || 'student'} onChange={(e) => { setform({ ...form, role: e.target.value }) }} name="" id="">
                                     <option value="student">Student</option>
                                     <option value="teacher">Teacher</option>
                                     <option value="admin">Admin</option>
@@ -135,14 +137,16 @@ const UserManagement = () => {
                             </div>
                             <div style={{ display: "flex", gap: '1rem', marginTop: "1rem" }}>
                                 <button className="btn-primary">{loading ? "processing" : editingUser ? "Update User" : "Create User"}</button>
-                                <button className="btn-ghost" style={{ flex: 1 }}>Cancel</button>
+                                <button onClick={()=>{setShowModal(false)
+                                    setform({ name: "", email: '', password: "", role: "student" })
+                                    setEditingUser(null)
+                                }} className="btn-ghost" style={{ flex: 1 }}>Cancel</button>
                             </div>
 
                         </form>
                     </div>
                 </div>
             </div >
-        </div >
     );
 }
 

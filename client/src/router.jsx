@@ -19,19 +19,12 @@ const Router = () => {
                 <Route path="/register" element={<Register />} />
            
                 <Route path="/dashboard" element={
-                    
-                         <ProtectedRouter>
-                          <Dashboard />
-                          </ProtectedRouter>
-                          
-                   } />
-                           <Route path="/dashboard/users" element={
-                    
-                         <ProtectedRouter>
-                          <UserManagement />
-                          </ProtectedRouter>
-                          
-                   } />
+                    <ProtectedRouter>
+                        <Dashboard />
+                    </ProtectedRouter>
+                }>
+                    <Route path="users" element={<UserManagement />} />
+                </Route>
       
 
             </Routes>

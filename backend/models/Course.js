@@ -31,7 +31,8 @@ const CourseSchema = new mongoose.Schema({
     thumbnail: {
         type: String,
          default: ""
-    }
+    },
+    chapters:[{type:mongoose.Schema.Types.ObjectId,ref:"chapter"}]
 
 })
 module.exports = mongoose.model("Course", CourseSchema)
